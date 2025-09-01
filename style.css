@@ -1,0 +1,20 @@
+body{background-color: rgb(0, 137, 139);
+border-style: solid;
+font-family: Georgia, 'Times New Roman', Times, serif;}
+
+
+p{font-family: 'Times New Roman', Times, serif;
+text-align: justify;}
+
+
+.Bryant{
+    margin-right:100%;
+    width: 200px;
+
+    display: block;
+    border-radius: 8px;
+    float: left;
+
+}
+
+h1{text-align: center;}
