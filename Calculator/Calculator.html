@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <Title>Trapeziem/Prism Calculator</Title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src='scripts.js'></script>
+    <h1>Calculator</h1>
+
+    <img src="/Calculator/Pictures/formula-to-find-area-of-a-trapezoid-or-trapezium-1613367865.png" alt="Area" max width="20%">
+    <img src="/Calculator/Pictures/perim.png" alt="perimeter" max width="20%">
+
+    <p><label for="a">Base a: </label><input type="text" id="a"></p>
+    <p><label for="b">Base b: </label><input type="text" id="b"></p>
+    <p><label for="h">Height h: </label><input type="text" id="h"></p>
+    <p><label for="len">Length (for prism volume): </label><input type="text" id="len"></p>
+
+
+    <h2>2D Trapezoid</h2>
+    <p>Area: <span id="areaSol">—</span></p>
+    <p>Perimeter (needs all 4 sides): <span id="perimSol">—</span></p>
+    <button onclick="calcArea()">Area</button>
+    <button onclick="calcPerimeter()">Perimeter</button>
+
+    <hr>
+
+    <h2>3D Prism</h2>
+    <img src="/Calculator/Pictures/vol.png" alt="volume" max width="20%">
+    <p>Volume: <span id="volSol">—</span></p>
+    <button onclick="calcVolume()">Volume</button>
+
+
+    <script>
+
+
+    function inputValue() {
+    let a = parseFloat(document.getElementById('a').value);
+    let b = parseFloat(document.getElementById('b').value);
+    let h = parseFloat(document.getElementById('h').value);
+    let len = parseFloat(document.getElementById('len').value);
+    return { a, b, h, len };
+}
+
+// Trapezoid Area
+// Formula: ((a + b) / 2) * h
+
+function calcArea() {
+    let a = parseFloat(document.getElementById('a').value);
+    let b = parseFloat(document.getElementById('b').value);
+    let h = parseFloat(document.getElementById('h').value);
+    const area = ((a + b) / 2) * h;   // trapezoid area formula
+    document.getElementById('areaSol').innerHTML= area;
+}
+
+function calcPerimeter(){
+    let a = parseFloat(document.getElementById('a').value);
+    let b = parseFloat(document.getElementById('b').value);
+    let h = parseFloat(document.getElementById('h').value);
+    //formula
+    const perimeter = (a + b + (2*h) )
+    document.getElementById('perimSol').innerHTML= perimeter;
+}
+
+function calcVolume(){
+    let a = parseFloat(document.getElementById('a').value);
+    let b = parseFloat(document.getElementById('b').value);
+    let h = parseFloat(document.getElementById('h').value);
+    let len = parseFloat(document.getElementById('len').value);
+    //formula
+    const volume =(((a + b)/2) * h *len)
+    document.getElementById('volSol').innerHTML = volume;
+
+}
+    </script>
+
+
+
+    
+</body>
+</html>
