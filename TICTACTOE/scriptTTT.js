@@ -12,9 +12,12 @@ function changeMark(buttonId){
     if(!currentMark){
         if(xTurn){
             document.getElementById(buttonId).innerHTML = 'X';
+            document.getElementById(buttonId).style.color = 'pink';
+            
         }
         else {
             document.getElementById(buttonId).innerHTML = 'O';
+            document.getElementById(buttonId).style.color = 'yellow';
         }
 
         xTurn = !xTurn;

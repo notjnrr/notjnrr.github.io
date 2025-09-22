@@ -1,0 +1,36 @@
+#winner {
+    min-height: 1.2em;
+    margin-top: 10px;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+body{
+    background:#3ecc0e;
+    font-family: "Times New Roman", Times, serif;
+    padding:24px;
+
+}
+
+table button{
+    width:70px;
+    height:70px;
+    background:#d21a1a;      
+    border:2px solid #411f71;
+    border-radius:10px;
+    font-size:40px;          
+    cursor:pointer;
+}
+
+#reSet{
+  width:150px;
+  height:46px;
+  background:#ffd166;      /* <-- distinct from board buttons */
+  color:#222;
+  border:2px solid #cc9a2b;
+  border-radius:12px;
+  font-size:18px;
+  font-weight:700;
+  cursor:pointer;
+
+}
