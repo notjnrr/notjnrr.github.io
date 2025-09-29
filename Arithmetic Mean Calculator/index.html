@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arithmetic Mean Calculator</title>
+    <script src="script.js"></script> 
+</head>
+<body>
+    <h1>Data Entry</h1>
+    
+    
+    <div>
+        <label for="val">Enter a number:</label>
+        <input id="val" type="text" />
+        <button onclick="addValue()">Add Value</button>
+        <button onclick="removeValue()">Remove Value</button>
+        <button onclick="computeMean()">Compute Mean</button>
+
+    </div>
+
+    <div>
+        <div>Current Dataset</div>
+        <div id="dataset">[]</div>
+    </div>
+
+    <div >
+        <div >Current Mean</div>
+        <div id="mean">[]</div>
+
+    </div>
+    
+</body>
+</html>
