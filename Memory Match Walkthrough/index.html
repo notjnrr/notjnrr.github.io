@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Memory Match</title>
+    <style>
+    body {
+        font-family: "Times New Roman", Times, serif; 
+        text-align: center;
+        background:#f8f8f8;
+        }
+
+        h1{
+            background:#1114c7; 
+            color:#808080; 
+            padding:10px; 
+            margin:12px auto; 
+         }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto; 
+        }
+        td { 
+            width: 60px; 
+            height: 60px;
+        }
+        .tile {
+        width: 60px; 
+        height: 60px; 
+        font-size: xx-large; 
+        color: #c31111;
+        background: #5811db; 
+        border: 2px solid #505050;
+        }
+    </style>
+    </head>
+    <body>
+    <h1>Welcome to Memory Match</h1>
+    <p><button onclick="gameReset()">Reset Game</button></p>
+    <div id="gameBoard"></div>
+
+    <script>
+        
+        let map = [];
+        let tile1 = null, tile2 = null;
+        let lock = false;
+
+        // 1) Build the data: pairs -> shuffle -> 2D map
+        const loadMap = (rows = 4, cols = 4) => {
+
+        const numPairs = (rows * cols) / 2;
+
+        let array = [];
+
+        for (let i = 1; i <= numPairs; i++){
+            array.push(i, i);
+        }
+
+        // Fisher–Yates shuffle (class method)
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+
+        map = [];
+        let index = 0;
+        for (let r = 0; r < rows; r++) {
+            map[r] = [];
+            for (let c = 0; c < cols; c++){
+                map[r][c] = array[index++];
+            }
+        }
+        };
+
+        //Draw buttons 
+        const makeBoard = (rows = 4, cols = 4) => {
+            let output = "<table>";
+                for (let r = 0; r < rows; r++) {
+                    output += "<tr>";
+                        for (let c = 0; c < cols; c++) {
+                            output += `<td><button class="tile" id="r${r}_c${c}"onclick="process(${r}, ${c})"></button></td>`;
+                }
+                output += "</tr>";
+            }
+            output += "</table>";
+            document.getElementById("gameBoard").innerHTML = output;
+        };
+
+        //Reset in the same order as lecture
+        const gameReset = () => {
+            tile1 = null; tile2 = null; lock = false;
+            loadMap(4, 4);
+            makeBoard(4, 4);
+        };
+
+        //reveal numbers, then check after 1s
+        const process = (row, col) =>{
+            
+            
+            const clickedTile = document.getElementById(`r${row}_c${col}`);
+            if (!clickedTile) 
+                return;              
+                if (clickedTile.hidden) return;        // already removed
+                if (tile1 !== null) {
+                    if (clickedTile === tile1) return;   // same tile twice
+                }
+
+                if (clickedTile.innerHTML !== "") return; // already showing
+
+                clickedTile.innerHTML = map[row][col];
+
+                if (tile1 === null) {
+                    tile1 = clickedTile;
+                    return;
+                }
+
+                if (tile2 === null) {
+                    tile2 = clickedTile;
+                    setTimeout(checkMatch, 1000);
+                }
+            };
+        
+        
+            
+            
+
+
+        //Compare
+        const checkMatch = () => {
+        if (tile1.innerHTML === tile2.innerHTML) {
+            tile1.hidden = true;  // remove from play
+            tile2.hidden = true;
+        } else {
+            tile1.innerHTML = ""; // hide again
+            tile2.innerHTML = "";
+        }
+        tile1 = null; 
+        tile2 = null; 
+        
+        };
+
+                
+
+        // Startup
+        window.onload = gameReset;
+    </script>
+    </body>
+</html>
