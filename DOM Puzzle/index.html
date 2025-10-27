@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Puzzle</title>
+    <Style>
+        #puzzle{
+            width: 500px;
+            height: 500px;
+            border: 5px solid black;
+
+        }
+    </Style>
+</head>
+<body>
+    <div id='puzzle'></div>
+    <script>
+    // All puzzle code must be implemented here 
+    const puzzle = document.getElementById('puzzle');
+    //establsihing a posininting for the absoulute children 
+    puzzle.style.position = 'relative'; 
+
+    const h1 = document.createElement('h1');
+    h1.textContent = 'DOM Puzzle';
+    puzzle.parentNode.insertBefore(h1, puzzle);
+    
+    
+    function makeBox(txt, left, top, bg) {
+        const box = document.createElement('div');
+        box.textContent = txt;
+        box.style.position = 'absolute';
+        box.style.left = left + 'px';
+        box.style.top = top + 'px';
+        box.style.width = '125px';
+        box.style.height = '125px';
+        box.style.border = '1px solid #000';
+        box.style.background = bg;
+        box.style.textAlign = 'center';
+        box.style.lineHeight = '125px';
+        box.style.fontWeight = 'bold';
+        box.style.color = '#fff';
+        box.style.boxSizing = 'border-box';
+        return box;
+    }
+
+    puzzle.appendChild(makeBox('A', 0,   0,   '#9455f4'));
+    puzzle.appendChild(makeBox('B', 125, 0,   '#4a2b74'));
+    puzzle.appendChild(makeBox('C', 0,   125, '#594492'));
+    puzzle.appendChild(makeBox('D', 125, 125, '#854DDC'));
+
+    function makeQuad(left, top,bg){
+        const q = document.createElement('div');
+        q.style.position = 'absolute';
+        q.style.left = left + 'px';
+        q.style.top  = top  + 'px';
+        q.style.width = '250px';
+        q.style.height = '250px';
+        q.style.background = bg;
+        q.style.boxSizing = 'border-box';
+      
+        return q;
+    }
+
+    puzzle.appendChild(makeQuad(250,   0, '#7F3A8A'));
+    puzzle.appendChild(makeQuad(  0, 250, '#733A8A'));
+
+
+    //100 buttons 10*10 in the lower right 25px*24px
+    for(let i = 0; i < 100; i++){
+        const btn =document.createElement('button')
+        btn.type = 'button';
+        btn.style.position = 'absolute';
+        const col = i % 10, row = Math.floor(i / 10);
+        btn.style.left = (250 + col * 25) + 'px';
+        btn.style.top = (250 + row * 25) + 'px';
+        btn.style.width = '25px';
+        btn.style.height = '25px';//Made width "25px"; At "24px"the grid leaves gaps
+        btn.style.background = '#C39CFE';
+        btn.style.boxSizing = 'border-box';
+        
+
+        btn.addEventListener('click', function (event) {
+        const current = event.currentTarget;
+        current.style.background = '#4A2574';
+        const prev = current.previousElementSibling;
+        const next = current.nextElementSibling;
+        if (prev && prev.tagName === 'BUTTON') prev.style.background = '#FF9E00';
+        if (next && next.tagName === 'BUTTON') next.style.background = '#FF9E00';
+      });
+
+      puzzle.appendChild(btn);
+
+    }
+
+
+    
+    puzzle.addEventListener('mouseenter', function (event) {
+        event.currentTarget.style.border = '5px solid orange';
+    });
+    puzzle.addEventListener('mouseleave', function (event) {
+        event.currentTarget.style.border = '5px solid #000';
+    });
+    
+    
+    const p = document.createElement('p');
+    p.textContent = 'This is a puzzle created entirely with JavaScript.';
+    puzzle.parentNode.insertBefore(p, puzzle.nextSibling);
+
+
+
+    </script>
+    
+</body>
+</html>
