@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments Form</title>
+</head>
+<body>
+    <h1>Comment Submission Form</h1>
+    <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"
+        pattern="[A-Za-z ]+" 
+        title="Please enter only letters"
+        required>
+        <br><br>
+        
+        <label for="phone">Phone Number:</label>
+        <input id="phone" type="tel" name="phone" 
+        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+        title="Phone number must be in the format: 123-456-7890"
+        required>
+        <br><br>
+        
+        <label for="email">Email Address:</label>
+        <input id="email" type="email" name="email" required>
+        <br><br>
+
+
+        <label for="comment">Comment:</label>
+        <textarea id="comment" name="comment"></textarea>
+
+        <label for="username">Username:</label>
+        <input id="username" type="text" 
+        name="username"
+        pattern="[a-z]{4-8}"
+        title="Username must be 4-8 lower-case"
+        required>
+        <br><br>
+
+        <label for="password">Password:</label>
+        <input id="password" type="password" name="password"
+        minlength="8"
+        maxlength="16"
+        required>
+        <br><br>
+        
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>
