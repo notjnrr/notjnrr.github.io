@@ -3,50 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comments Form</title>
+    <title>Comments Submission Form</title>
 </head>
 <body>
-    <h1>Comment Submission Form</h1>
-    <form>
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name"
-        pattern="[A-Za-z ]+" 
-        title="Please enter only letters"
-        required>
-        <br><br>
-        
-        <label for="phone">Phone Number:</label>
-        <input id="phone" type="tel" name="phone" 
-        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-        title="Phone number must be in the format: 123-456-7890"
-        required>
-        <br><br>
-        
-        <label for="email">Email Address:</label>
-        <input id="email" type="email" name="email" required>
-        <br><br>
 
+<h1>Comment Submission Form</h1>
 
-        <label for="comment">Comment:</label>
-        <textarea id="comment" name="comment"></textarea>
+<form id="commentForm">
 
-        <label for="username">Username:</label>
-        <input id="username" type="text" 
-        name="username"
-        pattern="[a-z]{4-8}"
-        title="Username must be 4-8 lower-case"
-        required>
-        <br><br>
+    
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" 
+    pattern="[A-Za-z ]+" required>
+    <br><br>
 
-        <label for="password">Password:</label>
-        <input id="password" type="password" name="password"
-        minlength="8"
-        maxlength="16"
-        required>
-        <br><br>
-        
+    <label for="phone">Phone Number:</label>
+    <input id="phone" type="tel" name="phone"
+    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
+    <br><br>
 
-        <button type="submit">Submit</button>
-    </form>
+    <label for="email">Email Address:</label>
+    <input id="email" type="email" name="email" required>
+    <br><br>
+
+    <label for="comment">Comment:</label>
+    <textarea id="comment" name="comment" required></textarea>
+    <br><br>
+
+   
+    <label for="username">Username:</label>
+    <input id="username" type="text" name="username" required>
+    <span id="userFeedback"></span>
+    <br><br>
+
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password" required>
+    <span id="passFeedback"></span>
+    <br><br>
+
+    
+    <button type="submit">Submit</button>
+</form>
+
+<p id="formMessage"></p>
+
+<script>
+// Username realtime validation
+const username = document.getElementById('username');
+const userFeedback = document.getElementById('userFeedback');
+username.addEventListener('input', () => {
+  const valid = /^[A-Za-z0-9_]+$/.test(username.value);
+  if (valid) {
+    userFeedback.textContent = "Valid username ✔";
+  } else {
+    userFeedback.textContent = "Use only letters, numbers, and underscores.";
+  }
+});
+
+// Password real-time validation
+const password = document.getElementById('password');
+const passFeedback = document.getElementById('passFeedback');password.addEventListener('input', () => {
+  const valid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(password.value);
+  if (valid) {
+    passFeedback.textContent = "Password meets all requirements ✔";
+  } else {
+    passFeedback.textContent = "Must include uppercase, lowercase, number, special char, and 8+ chars.";
+  }
+});
+
+// Input sanitization
+function sanitizeInput(text) {
+  const map = { '<':'&lt;', '>':'&gt;', '&':'&amp;', '"':'&quot;', "'":'&apos;' };
+  return text.replace(/[<>&"']/g, m => map[m]);
+}
+
+document.getElementById('commentForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const fields = ['name', 'phone', 'email', 'comment', 'username', 'password'];
+    const sanitizedData = {};
+    
+    
+    
+    fields.forEach(field => {
+        const input = document.getElementById(field);
+        sanitizedData[field] = sanitizeInput(input.value);
+    });
+    
+    console.log("Sanitized Data:", sanitizedData);
+
+    document.getElementById('formMessage').textContent = "Form submitted successfully... and data sanitized.";
+});
+</script>
+
 </body>
 </html>
