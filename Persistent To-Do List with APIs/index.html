@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Persistent To-Do with APIs</title>
+    <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 16px; }
+    .row { margin: 8px 0; }
+    ul { padding-left: 18px; }
+    li { margin: 6px 0; }
+    button { cursor: pointer; }
+    body.dark { background:#111; color:#f5f5f5; }
+    body.dark button { color:#111; }
+    small.mono { font-family: ui-monospace, Consolas, monospace; }
+    </style>
+    
+</head>
+<body>
+    <h1>Persistent To-Do List with APIs</h1>
+    
+    <section class="row">
+    <strong>Theme:</strong>
+    <span id="themeName">Light</span>
+    <button id="toggleThemeBtn">Toggle Light/Dark</button>
+    </section>
+    
+    <hr>
+    
+    <section>
+        <h2>To-Do List</h2>
+        <div class="row">
+            <label for="taskInput">New Task: </label>
+            <input id="taskInput" type="text" placeholder="e.g., Finish lab" />
+            <button id="addBtn">Add Task</button>
+        </div>
+        
+        
+        <ul id="taskList"></ul>
+        
+        <p class="row">
+            Items added this session:
+            <strong id="sessionCount">0</strong>
+        </p>
+        
+        <p class="row">
+            <small class="mono">Stored as JSON in localStorage key: "tasks"</small>
+        </p>
+    </section>
+    <hr>
+
+  
+    <section>
+        <h2>Motivational Quote</h2>
+        <blockquote id="quote">Loading...</blockquote>
+        <button id="newQuoteBtn">New Quote</button>
+    </section>
+    
+    
+    <script>
+    
+    function setCookie(name, value, days) {
+        const d = new Date();
+        d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = name + "=" + encodeURIComponent(value) +"; expires=" + d.toUTCString() + "; path=/";
+    }
+
+    function getCookie(name) {
+        const target = name + "=";
+        const parts = document.cookie.split(";");
+        for (let c of parts) {
+            c = c.trim();
+            if (c.indexOf(target) === 0) {
+            return decodeURIComponent(c.substring(target.length));
+            }
+        }
+        return "";
+    }
+
+    
+    function applyTheme(theme) {
+        if (theme === "dark") {
+            document.body.classList.add("dark");
+            document.getElementById("themeName").textContent = "Dark";
+        } 
+        else {
+            document.body.classList.remove("dark");
+            document.getElementById("themeName").textContent = "Light";
+        }
+    }
+    
+    function initTheme() {
+        const saved = getCookie("theme") || "light";
+        applyTheme(saved);
+        document.getElementById("toggleThemeBtn").addEventListener("click", function () {
+            const isDark = document.body.classList.contains("dark");
+            const next = isDark ? "light" : "dark";
+            applyTheme(next);
+            setCookie("theme", next, 7); 
+      });
+    }
+    
+    const TASKS_KEY = "tasks";
+    let tasks = [];
+
+    function loadTasks() {
+        try {
+            const raw = localStorage.getItem(TASKS_KEY);
+            tasks = raw ? JSON.parse(raw) : [];
+            if (!Array.isArray(tasks)) tasks = [];
+        } 
+        catch (e) {
+            tasks = [];
+        }
+    }
+    
+
+    function saveTasks() {
+        localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+    }
+
+    function renderTasks() {
+        const ul = document.getElementById("taskList");
+        ul.innerHTML = ""; // clear
+        tasks.forEach((text, idx) => {
+            const li = document.createElement("li");
+            const span = document.createElement("span");
+            span.textContent = text; 
+            
+            const btn = document.createElement("button");
+            btn.textContent = "Remove";
+            btn.addEventListener("click", function () {
+            removeTask(idx);
+            });
+            li.appendChild(span);
+            li.appendChild(document.createTextNode(" "));
+            li.appendChild(btn);
+            ul.appendChild(li);
+      });
+    }
+
+    function addTask() {
+        const input = document.getElementById("taskInput");
+        const value = input.value.trim();
+        if (value === "") return; 
+        tasks.push(value);
+        saveTasks();
+        renderTasks();
+        input.value = "";
+        incrementSessionCount();
+    }
+
+    function removeTask(index) {
+        tasks.splice(index, 1);
+        saveTasks();
+        renderTasks();
+    }
+
+    
+    const SESSION_COUNT_KEY = "sessionAddedCount";
+
+    function getSessionCount() {
+        const n = parseInt(sessionStorage.getItem(SESSION_COUNT_KEY), 10);
+        return isNaN(n) ? 0 : n;
+    }
+
+    function setSessionCount(n) {
+        sessionStorage.setItem(SESSION_COUNT_KEY, String(n));
+        document.getElementById("sessionCount").textContent = n;
+    }
+
+    function incrementSessionCount() {
+        const n = getSessionCount() + 1;
+        setSessionCount(n);
+    }
+
+    
+    async function fetchQuote() {
+        const el = document.getElementById("quote");
+        try {
+        const res = await fetch("https://api.quotable.io/random");
+        if (!res.ok) throw new Error("Bad response");
+        const data = await res.json();
+        el.textContent = data.content + " — " + data.author;
+        }
+        catch (err) {
+        
+            
+        el.textContent = "Keep going. You've got this.";
+      }
+    }
+
+    
+    window.addEventListener("DOMContentLoaded", function () {
+        
+
+        initTheme();
+
+
+        loadTasks();
+        renderTasks();
+        document.getElementById("addBtn").addEventListener("click", addTask);
+
+
+        setSessionCount(getSessionCount()); 
+
+        
+        document.getElementById("newQuoteBtn").addEventListener("click", fetchQuote);
+        fetchQuote();
+    });
+  </script>
+</body>
+</html>
