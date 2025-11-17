@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Collection</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 20px auto;
+    }
+    h1 {
+    margin-bottom: 10px;
+    }
+
+    #media-container {
+        margin-top: 20px;
+    }
+    
+    ul.media-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    li.media-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    li.media-item img {
+        width: 80px;
+        height: auto;
+        object-fit: cover;
+     }
+
+    .media-info h2 {
+        margin: 0 0 5px 0;
+        font-size: 1.1rem;
+    }
+    .media-info p {
+        margin: 2px 0;
+    }
+    </style>
+</head>
+<body>
+    <h1>Album Database Mockup</h1>
+    <p></p>
+
+    <div id="media-container"></div>
+
+    <script>
+    
+    const albumsJson = `[
+    {
+    "title": "Mama's Gun",
+    "artist": "Erykah Badu",
+    "year": 2000,
+    "image": "images/gun.jpeg",
+    "genre": "R&B/Soul"
+    },
+    
+    {
+    "title": "The E Rated Adution",
+    "artist": "Miklzy",
+    "year": 2025,
+    "image": "images/e.jpg",
+    "genre": "Hip-Hop/Rap"
+    },
+    
+    {
+    "title": "The pressure on Me",
+    "artist": "Muchi",
+    "year": 2023,
+    "image": "images/pressure.jpg",
+    "genre": "Hip-Hop/Rap"
+
+    }
+    ]`;
+    
+    
+    class Album {
+        #year; // private field
+        
+        constructor(title, artist,year,genre,image) {
+            this.title = title;      
+            this.artist = artist; 
+            this.year = year;  
+            this.genre = genre;   
+            this.image = image; 
+            
+        }
+
+            // Getter for private year field
+        get year() {
+            return this.#year;
+        }
+        
+
+        
+        set year(value) {
+            let num = Number(value);
+            
+            
+            if (isNaN(num) || num < 1900 || num > 2100) {
+                num = 1900; // fallback default
+                }
+                this.#year = num;
+            }
+            
+            
+            toString() {
+                return `${this.title} by ${this.artist}, released in ${this.year} [${this.genre}]`;
+            }
+
+           
+            createHTMLElement() {
+                const li = document.createElement('li');
+                li.classList.add('media-item');
+
+                const img = document.createElement('img');
+                img.src = this.image;
+                img.alt = this.title;
+
+                const infoDiv = document.createElement('div');
+                infoDiv.classList.add('media-info');
+
+                const titleEl = document.createElement('h2');
+                titleEl.textContent = this.title;
+
+                const artistEl = document.createElement('p');
+                artistEl.textContent = `Artist: ${this.artist}`;
+
+                const genreEl = document.createElement('p');
+                genreEl.textContent = `Genre: ${this.genre}`;
+
+                const yearEl = document.createElement('p');
+                yearEl.textContent = `Year: ${this.year}`;
+
+                infoDiv.appendChild(titleEl);
+                infoDiv.appendChild(artistEl);
+                infoDiv.appendChild(yearEl);
+                infoDiv.appendChild(genreEl);
+                
+
+                li.appendChild(img);
+                li.appendChild(infoDiv);
+
+                return li;
+            }
+        }
+    
+      
+        const albumObjects = JSON.parse(albumsJson);
+
+  
+        const albums = albumObjects.map(a =>new Album(a.title, a.artist, a.year, a.genre, a.image));
+
+        // \ Display the collection
+        const container = document.getElementById('media-container');
+        const list = document.createElement('ul');
+        list.classList.add('media-list');
+
+        albums.forEach(album => {const itemElement = album.createHTMLElement();
+            list.appendChild(itemElement);
+            
+            console.log(album.toString());
+        });
+
+        container.appendChild(list);
+    </script>
+</body>
+</html>
